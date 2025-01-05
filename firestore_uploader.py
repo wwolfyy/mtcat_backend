@@ -9,15 +9,15 @@ from firebase_admin import firestore
 # %%
 def upload_gs_2_firestore(Credentials, build, credentials, firebase_admin, firestore, pd):
     # Firebase Authentication
-    cred = credentials.Certificate('./google_svs_account.json')  # Replace with your service account key file    
+    cred = credentials.Certificate('./google_svs_account.json')  # Replace with your service account key file
     # initialize Firebase App
     try:
         firebase_app = firebase_admin.initialize_app(
             credential=cred,
-            options={            
-                'projectId': 'mountaincats-61543',  
+            options={
+                'projectId': 'mountaincats-61543',
                 'databaseURL': 'mountaincats-61543.firebaseio.com',
-                'storageBucket': 'mountaincats-61543.appspot.com', 
+                'storageBucket': 'mountaincats-61543.appspot.com',
                 'serviceAccountId': '104983902960398669570'
                 # databaseAuthVariableOverride
                 # httpTimeout
@@ -29,10 +29,10 @@ def upload_gs_2_firestore(Credentials, build, credentials, firebase_admin, fires
     # if app has already been initialized, get the app
     # firebase_admin.get_app('mountaincats')
 
-    db = firestore.client(app=firebase_app)    
+    db = firestore.client(app=firebase_app)
 
     # get the storage bucket
-    # bucket = storage.bucket()  
+    # bucket = storage.bucket()
 
     # Google Sheets Authentication
     scopes = ['https://www.googleapis.com/auth/spreadsheets.readonly']
@@ -53,7 +53,7 @@ def upload_gs_2_firestore(Credentials, build, credentials, firebase_admin, fires
     # Write to Firestore
     for index, row in df.iterrows():
         data = row.to_dict()
-        db.collection('cats').document(str(data['id'])).set(data) 
+        db.collection('cats').document(str(data['id'])).set(data)
 
     print("Data successfully written to Firestore!")
     return (
@@ -72,4 +72,6 @@ def upload_gs_2_firestore(Credentials, build, credentials, firebase_admin, fires
         values,
     )
 
-# %%
+# %% main function
+if __name__ == '__main__':
+    upload_gs_2_firestore(Credentials, build, credentials, firebase_admin, firestore, pd)
